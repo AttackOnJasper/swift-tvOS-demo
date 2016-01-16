@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		EC3640811C49E1DC00E89739 /* TVServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EC3640801C49E1DC00E89739 /* TVServices.framework */; };
+		EC3640841C49E1DC00E89739 /* ServiceProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC3640831C49E1DC00E89739 /* ServiceProvider.swift */; };
+		EC3640881C49E1DC00E89739 /* TopShelf.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = EC36407E1C49E1DC00E89739 /* TopShelf.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		EC6CAECA1C30FDE400EF2CB4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC6CAEC91C30FDE400EF2CB4 /* AppDelegate.swift */; };
 		EC6CAECC1C30FDE400EF2CB4 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC6CAECB1C30FDE400EF2CB4 /* ViewController.swift */; };
 		EC6CAECF1C30FDE400EF2CB4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EC6CAECD1C30FDE400EF2CB4 /* Main.storyboard */; };
@@ -16,7 +19,35 @@
 		EC6CAEDD1C3105F300EF2CB4 /* PlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC6CAEDC1C3105F300EF2CB4 /* PlayerViewController.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		EC3640861C49E1DC00E89739 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EC6CAEBE1C30FDE400EF2CB4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = EC36407D1C49E1DC00E89739;
+			remoteInfo = TopShelf;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		EC36408C1C49E1DC00E89739 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				EC3640881C49E1DC00E89739 /* TopShelf.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		EC36407E1C49E1DC00E89739 /* TopShelf.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = TopShelf.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		EC3640801C49E1DC00E89739 /* TVServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = TVServices.framework; path = System/Library/Frameworks/TVServices.framework; sourceTree = SDKROOT; };
+		EC3640831C49E1DC00E89739 /* ServiceProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceProvider.swift; sourceTree = "<group>"; };
+		EC3640851C49E1DC00E89739 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EC6CAEC61C30FDE400EF2CB4 /* swift-tvOS-demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "swift-tvOS-demo.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		EC6CAEC91C30FDE400EF2CB4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		EC6CAECB1C30FDE400EF2CB4 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -29,6 +60,14 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		EC36407B1C49E1DC00E89739 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EC3640811C49E1DC00E89739 /* TVServices.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		EC6CAEC31C30FDE400EF2CB4 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -41,12 +80,31 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		EC36407F1C49E1DC00E89739 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				EC3640801C49E1DC00E89739 /* TVServices.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		EC3640821C49E1DC00E89739 /* TopShelf */ = {
+			isa = PBXGroup;
+			children = (
+				EC3640831C49E1DC00E89739 /* ServiceProvider.swift */,
+				EC3640851C49E1DC00E89739 /* Info.plist */,
+			);
+			path = TopShelf;
+			sourceTree = "<group>";
+		};
 		EC6CAEBD1C30FDE400EF2CB4 = {
 			isa = PBXGroup;
 			children = (
 				EC6CAEDA1C3104BB00EF2CB4 /* AVFoundation.framework */,
 				EC6CAED81C3104B500EF2CB4 /* AVKit.framework */,
 				EC6CAEC81C30FDE400EF2CB4 /* swift-tvOS-demo */,
+				EC3640821C49E1DC00E89739 /* TopShelf */,
+				EC36407F1C49E1DC00E89739 /* Frameworks */,
 				EC6CAEC71C30FDE400EF2CB4 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -55,6 +113,7 @@
 			isa = PBXGroup;
 			children = (
 				EC6CAEC61C30FDE400EF2CB4 /* swift-tvOS-demo.app */,
+				EC36407E1C49E1DC00E89739 /* TopShelf.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -75,6 +134,23 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		EC36407D1C49E1DC00E89739 /* TopShelf */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = EC36408B1C49E1DC00E89739 /* Build configuration list for PBXNativeTarget "TopShelf" */;
+			buildPhases = (
+				EC36407A1C49E1DC00E89739 /* Sources */,
+				EC36407B1C49E1DC00E89739 /* Frameworks */,
+				EC36407C1C49E1DC00E89739 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = TopShelf;
+			productName = TopShelf;
+			productReference = EC36407E1C49E1DC00E89739 /* TopShelf.appex */;
+			productType = "com.apple.product-type.tv-app-extension";
+		};
 		EC6CAEC51C30FDE400EF2CB4 /* swift-tvOS-demo */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = EC6CAED51C30FDE400EF2CB4 /* Build configuration list for PBXNativeTarget "swift-tvOS-demo" */;
@@ -82,10 +158,12 @@
 				EC6CAEC21C30FDE400EF2CB4 /* Sources */,
 				EC6CAEC31C30FDE400EF2CB4 /* Frameworks */,
 				EC6CAEC41C30FDE400EF2CB4 /* Resources */,
+				EC36408C1C49E1DC00E89739 /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				EC3640871C49E1DC00E89739 /* PBXTargetDependency */,
 			);
 			name = "swift-tvOS-demo";
 			productName = "swift-tvOS-demo";
@@ -102,6 +180,9 @@
 				LastUpgradeCheck = 0720;
 				ORGANIZATIONNAME = Jasper;
 				TargetAttributes = {
+					EC36407D1C49E1DC00E89739 = {
+						CreatedOnToolsVersion = 7.2;
+					};
 					EC6CAEC51C30FDE400EF2CB4 = {
 						CreatedOnToolsVersion = 7.2;
 					};
@@ -121,11 +202,19 @@
 			projectRoot = "";
 			targets = (
 				EC6CAEC51C30FDE400EF2CB4 /* swift-tvOS-demo */,
+				EC36407D1C49E1DC00E89739 /* TopShelf */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		EC36407C1C49E1DC00E89739 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		EC6CAEC41C30FDE400EF2CB4 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -138,6 +227,14 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		EC36407A1C49E1DC00E89739 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EC3640841C49E1DC00E89739 /* ServiceProvider.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		EC6CAEC21C30FDE400EF2CB4 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -149,6 +246,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		EC3640871C49E1DC00E89739 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = EC36407D1C49E1DC00E89739 /* TopShelf */;
+			targetProxy = EC3640861C49E1DC00E89739 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		EC6CAECD1C30FDE400EF2CB4 /* Main.storyboard */ = {
@@ -162,6 +267,28 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		EC3640891C49E1DC00E89739 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				INFOPLIST_FILE = TopShelf/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "Jasper.swift-tvOS-demo.TopShelf";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		EC36408A1C49E1DC00E89739 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				INFOPLIST_FILE = TopShelf/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "Jasper.swift-tvOS-demo.TopShelf";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
 		EC6CAED31C30FDE400EF2CB4 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -248,6 +375,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				INFOPLIST_FILE = "swift-tvOS-demo/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "Jasper.swift-tvOS-demo";
@@ -260,6 +388,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				INFOPLIST_FILE = "swift-tvOS-demo/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "Jasper.swift-tvOS-demo";
@@ -270,6 +399,14 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		EC36408B1C49E1DC00E89739 /* Build configuration list for PBXNativeTarget "TopShelf" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EC3640891C49E1DC00E89739 /* Debug */,
+				EC36408A1C49E1DC00E89739 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
 		EC6CAEC11C30FDE400EF2CB4 /* Build configuration list for PBXProject "swift-tvOS-demo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -286,6 +423,7 @@
 				EC6CAED71C30FDE400EF2CB4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

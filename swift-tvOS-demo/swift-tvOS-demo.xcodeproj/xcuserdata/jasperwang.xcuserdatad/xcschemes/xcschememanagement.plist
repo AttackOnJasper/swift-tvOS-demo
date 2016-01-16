@@ -4,6 +4,11 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
+		<key>TopShelf.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>1</integer>
+		</dict>
 		<key>swift-tvOS-demo.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
@@ -12,6 +17,11 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
+		<key>EC36407D1C49E1DC00E89739</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>EC6CAEC51C30FDE400EF2CB4</key>
 		<dict>
 			<key>primary</key>
