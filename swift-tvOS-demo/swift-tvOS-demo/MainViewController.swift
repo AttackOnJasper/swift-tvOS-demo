@@ -40,23 +40,82 @@ class MainViewController: AVPlayerViewController,UICollectionViewDelegate,UIColl
         }
     }
     
-    @IBOutlet weak var headOverlayView: FocusableEmptyView!
+    @IBOutlet weak var headOverlayView: UIView!
     @IBOutlet weak var avPlayerLayerContainer: UIView!
     
     let allChannels: [ChannelModel] = processedChannelList
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+//        setupFocusGuides()
 
         // Do any additional setup after loading the view.
         player = AVPlayer(URL: NSBundle.mainBundle().URLForResource("niagara", withExtension: "mp4")!)
+//        self.playerLayer = AVPlayerLayer(player: player)
+//        self.avPlayerLayerContainer.layer.addSublayer(self.playerLayer)
         player?.play()
+    }
+    
+    func setupFocusGuides() {
+        let topFocusGuide = UIFocusGuide()
+        self.view.addLayoutGuide(topFocusGuide)
+        
+        topFocusGuide.leftAnchor.constraintEqualToAnchor(self.view.leftAnchor).active = true
+        topFocusGuide.rightAnchor.constraintEqualToAnchor(self.view.rightAnchor).active = true
+        topFocusGuide.bottomAnchor.constraintEqualToAnchor(self.headOverlayView.topAnchor).active = true
+        topFocusGuide.heightAnchor.constraintEqualToConstant(40).active = true
+        topFocusGuide.preferredFocusedView = self.avPlayerLayerContainer
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+    override func shouldUpdateFocusInContext(context: UIFocusUpdateContext) -> Bool {
+        if  context.nextFocusedView == .Some(self.avPlayerLayerContainer){
+            if self.navigationState == .HeadOverlay {
+                self.navigationState = .Video
+            } else {
+                return false
+            }
+        }
+        if  context.previouslyFocusedView == .Some(self.avPlayerLayerContainer) && context.focusHeading == .Down {
+            self.navigationState = .HeadOverlay
+        }
+        return true
+    }
+    
+    var navigationState: MainNavigationMode = .Video {
+        didSet {
+            if self.isViewLoaded() {
+                updateUIState(animated: true)
+            }
+            self.setNeedsFocusUpdate()
+            NSLog("navigation state changes")
+        }
+        
+    }
+    
+    func updateUIState(animated animate: Bool) {
+        
+        
+        
+        let adjustUIState = {
+        }
+        
+        if (animate) {
+            UIView.animateWithDuration(0.2) {
+                self.view.layoutIfNeeded()
+                adjustUIState()
+            }
+            
+        } else {
+            adjustUIState()
+        }
+    }
+
     
     func playMainChannel(channel: ChannelModel) {
         self.playerLayer.player?.replaceCurrentItemWithPlayerItem(AVPlayerItem(URL: channel.streamUrl))
