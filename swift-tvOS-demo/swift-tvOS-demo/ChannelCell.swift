@@ -11,8 +11,8 @@ import UIKit
 
 class ChannelCell: UICollectionViewCell {
 
-    @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var subtitleLabel: UILabel!
+    @IBOutlet weak var showTitleLabel: UILabel!
+    @IBOutlet weak var showSubtitleLabel: UILabel!
     @IBOutlet weak var previewImageView: UIImageView!
     
     var channel: ChannelModel? {
@@ -56,8 +56,8 @@ class ChannelCell: UICollectionViewCell {
     }
     
     func updateFocusedStateUI() {
-        self.subtitleLabel.hidden = !self.focusedState
-        self.titleLabel.hidden = !self.focusedState
+        self.showSubtitleLabel.hidden = !self.focusedState
+        self.showTitleLabel.hidden = !self.focusedState
         
         //            if self.focusedState {
         //                self.transform = CGAffineTransformMakeScale(1.1, 1.1)
@@ -83,9 +83,10 @@ class ChannelCell: UICollectionViewCell {
     }
     
     private func updateToChannel() {
-        self.subtitleLabel.text = "This is subtitle"
-        self.titleLabel.text = self.channel?.name
+        self.showSubtitleLabel.text = "Fake show subtitle"
+        self.showTitleLabel.text = self.channel?.name
         self.previewImageView.image = self.channel?.preview
     }
-
+    
+    
 }
