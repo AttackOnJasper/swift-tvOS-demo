@@ -19,11 +19,11 @@ func randomStreamUrl() -> NSURL {
     return NSBundle.mainBundle().URLForResource(fileName, withExtension: "mp4")!
 }
 
-let processedChannelList = channelList.map {
-    name in ChannelModel(name: name, preview: UIImage(named: name), url: "",  streamUrl: randomStreamUrl())
+let TestChannels = channelList.map { name in
+    ChannelModel(name: name, preview: UIImage(named: "sample"), url: "", streamUrl: randomStreamUrl())
 }
 
-enum MainNavigationMode { case Video, HeadOverlay }
+
 
 class FocusableEmptyView: UIView {
     var focusable = true
@@ -32,31 +32,64 @@ class FocusableEmptyView: UIView {
     }
 }
 
-class MainViewController: AVPlayerViewController,UICollectionViewDelegate,UICollectionViewDataSource {
+enum MainNavigationMode { case Video, Swimlane, HeadOverlay }
+
+class MainViewController: UIViewController, UIGestureRecognizerDelegate, UICollectionViewDataSource, UICollectionViewDelegate  {
+    
+    let allChannels: [ChannelModel] = TestChannels
+    
+    @IBOutlet weak var networksSwimlaneContainerView: UIView!
+    @IBOutlet weak var networksSwimlaneControllerBottomConstraint: NSLayoutConstraint!
+    @IBOutlet weak var mainFocusGuideContainerView: UIView!
+    @IBOutlet weak var headOverlayTopConstraint: NSLayoutConstraint!
+    @IBOutlet weak var headOverlayView: FocusableEmptyView!
+    @IBOutlet weak var headOverlayFadeImageView: UIImageView!
+    @IBOutlet weak var menuSwipeDownView: FocusableEmptyView!
+    @IBOutlet weak var bottomFadeView: UIImageView!
+    
+    @IBOutlet weak var showTitleLabel: UILabel!
+    @IBOutlet weak var episodeNameLabel: UILabel!
+    @IBOutlet weak var descriptionLabel: UILabel!
+    @IBOutlet weak var overlayImageView: UIImageView!
+    
+    @IBOutlet weak var dockToPIPButton: UIButton!
+    @IBOutlet weak var avPlayerLayerContainer: UIView!
     var playerLayer: AVPlayerLayer! = nil
-    var mainPlayingChannel: ChannelModel! = nil {
+
+    @IBOutlet weak var menuButtonsContainer: UIStackView!
+    var tapGestureRec: UITapGestureRecognizer = UITapGestureRecognizer()
+    
+    
+    var navigationState: MainNavigationMode = .Video {
         didSet {
-            playMainChannel(self.mainPlayingChannel)
+            if self.isViewLoaded() {
+                updateUIState(animated: true)
+            }
+            self.setNeedsFocusUpdate()
         }
+        
     }
     
-    @IBOutlet weak var headOverlayView: UIView!
-    @IBOutlet weak var avPlayerLayerContainer: UIView!
     
-    let allChannels: [ChannelModel] = processedChannelList
-
     override func viewDidLoad() {
         super.viewDidLoad()
+        let tapRecognizer = UITapGestureRecognizer(target: self, action: Selector("tapped"))
+        tapRecognizer.allowedPressTypes = [NSNumber(integer: UIPressType.Menu.rawValue)];
+        tapRecognizer.delegate = self
+        self.view.addGestureRecognizer(tapRecognizer)
+        self.updateUIState(animated: false)
         
-//        setupFocusGuides()
-
-        // Do any additional setup after loading the view.
-        player = AVPlayer(URL: NSBundle.mainBundle().URLForResource("niagara", withExtension: "mp4")!)
-//        self.playerLayer = AVPlayerLayer(player: player)
-//        self.avPlayerLayerContainer.layer.addSublayer(self.playerLayer)
-        player?.play()
+        setupFocusGuides()
+        
+        setupDefaultPlayback()
+        self.headOverlayFadeImageView.transform = CGAffineTransformMakeScale(1, -1)
     }
     
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        self.playerLayer.frame = self.avPlayerLayerContainer.bounds
+    }
+
     func setupFocusGuides() {
         let topFocusGuide = UIFocusGuide()
         self.view.addLayoutGuide(topFocusGuide)
@@ -65,65 +98,91 @@ class MainViewController: AVPlayerViewController,UICollectionViewDelegate,UIColl
         topFocusGuide.rightAnchor.constraintEqualToAnchor(self.view.rightAnchor).active = true
         topFocusGuide.bottomAnchor.constraintEqualToAnchor(self.headOverlayView.topAnchor).active = true
         topFocusGuide.heightAnchor.constraintEqualToConstant(40).active = true
-        topFocusGuide.preferredFocusedView = self.avPlayerLayerContainer
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+        topFocusGuide.preferredFocusedView = self.mainFocusGuideContainerView
     }
     
-    override func shouldUpdateFocusInContext(context: UIFocusUpdateContext) -> Bool {
-        if  context.nextFocusedView == .Some(self.avPlayerLayerContainer){
-            if self.navigationState == .HeadOverlay {
-                self.navigationState = .Video
-            } else {
-                return false
-            }
-        }
-        if  context.previouslyFocusedView == .Some(self.avPlayerLayerContainer) && context.focusHeading == .Down {
-            self.navigationState = .HeadOverlay
-        }
-        return true
-    }
     
-    var navigationState: MainNavigationMode = .Video {
-        didSet {
-            if self.isViewLoaded() {
-                updateUIState(animated: true)
-            }
-            self.setNeedsFocusUpdate()
-            NSLog("navigation state changes")
-        }
-        
+    func setupDefaultPlayback() {
+        let player = AVPlayer(URL: NSBundle.mainBundle().URLForResource("niagara", withExtension: "mp4")!)
+        self.playerLayer = AVPlayerLayer(player: player)
+        self.avPlayerLayerContainer.layer.addSublayer(self.playerLayer)
+        self.playerLayer.player?.play()
+        self.updateHeadOverlay(self.allChannels.first!)
     }
-    
-    func updateUIState(animated animate: Bool) {
-        
-        
-        
-        let adjustUIState = {
-        }
-        
-        if (animate) {
-            UIView.animateWithDuration(0.2) {
-                self.view.layoutIfNeeded()
-                adjustUIState()
-            }
-            
-        } else {
-            adjustUIState()
-        }
-    }
-
     
     func playMainChannel(channel: ChannelModel) {
         self.playerLayer.player?.replaceCurrentItemWithPlayerItem(AVPlayerItem(URL: channel.streamUrl))
         self.playerLayer.player?.play()
     }
     
+    func updateHeadOverlay(channel: ChannelModel) {
+        self.showTitleLabel.text = channel.name
+        self.episodeNameLabel.text = "Season and episode hardcoded"
+        self.descriptionLabel.text = "Some very very long and informative episode description."
+        self.overlayImageView.image = channel.preview
+    }
+    
+    //MARK: - Customzing Focus engine
+    
+    func tapped(){
+        if self.navigationState == .Swimlane{
+            self.navigationState = .Video
+        }
+    }
+
+    override var preferredFocusedView: UIView? {
+        switch self.navigationState {
+        case .Swimlane:
+            return self.networksSwimlaneContainerView.preferredFocusedView
+        case .HeadOverlay:
+            return self.headOverlayView
+        default:
+            return self.mainFocusGuideContainerView
+        }
+    }
+    
+    var navigationDisabled: Bool = false
+    
+    override func shouldUpdateFocusInContext(context: UIFocusUpdateContext) -> Bool {
+
+        
+        if  context.nextFocusedView == .Some(self.mainFocusGuideContainerView) {
+            if self.navigationState == .HeadOverlay && context.focusHeading == .Up {
+                
+                self.navigationState = .Video
+                self.navigationDisabled = true
+
+                let delay = dispatch_time(DISPATCH_TIME_NOW, Int64(0.5 * Double(NSEC_PER_SEC)))
+                dispatch_after(delay, dispatch_get_main_queue()) {
+                    self.navigationDisabled = false
+                }
+
+            } else {
+                return false
+            }
+        } else if context.previouslyFocusedView == .Some(self.mainFocusGuideContainerView) {
+            if self.navigationDisabled { return false }
+            if context.focusHeading == .Up {
+                self.navigationState = .Swimlane
+            }
+            if context.focusHeading == .Down {
+                self.navigationState = .HeadOverlay
+                self.headOverlayView.focusable = false
+                self.setNeedsFocusUpdate()
+                return false
+            }
+        }
+
+        return true
+    }
+
+    @IBAction func mainViewClicked(sender: AnyObject) {
+        self.navigationState = .Swimlane
+    }
+    
     
     //MARK: - UICollectionViewDelegate
+    
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return self.allChannels.count
     }
@@ -139,7 +198,79 @@ class MainViewController: AVPlayerViewController,UICollectionViewDelegate,UIColl
         
     }
     
+    // MARK: - UIGestureRecognizerDelegate
     
+    func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldReceivePress press: UIPress) -> Bool {
+        return self.navigationState == .Swimlane
+    }
+    
+    
+    //MARK: - Internal state update
+    
+    func updateUIState(animated animate: Bool) {
+        let adjustUIState = {
+            switch self.navigationState {
+            case .Video:
+                self.menuButtonsContainer.alpha = 0
+                self.bottomFadeView.alpha = 0
+            case .Swimlane:
+                self.menuButtonsContainer.alpha = 1
+                self.bottomFadeView.alpha = 1
+            case .HeadOverlay:
+                self.menuButtonsContainer.alpha = 0
+                self.bottomFadeView.alpha = 0
+            }
+        }
+        
+        switch self.navigationState {
+        case .Video:
+            self.networksSwimlaneControllerBottomConstraint.constant = -self.networksSwimlaneContainerView.frame.height
+            self.headOverlayTopConstraint.constant = -self.headOverlayView.frame.height
+        case .Swimlane:
+            self.networksSwimlaneControllerBottomConstraint.constant = 0
+            self.headOverlayTopConstraint.constant = -self.headOverlayView.frame.height
+        default:
+            self.networksSwimlaneControllerBottomConstraint.constant = -self.networksSwimlaneContainerView.frame.height
+            self.headOverlayTopConstraint.constant = 0
+        }
+        
+        if (animate) {
+            UIView.animateWithDuration(0.2) {
+                self.view.layoutIfNeeded()
+                adjustUIState()
+            }
+            
+        } else {
+            adjustUIState()
+        }
+    }
+    
+    //MARK: - Navigation handling
+    
+    @IBAction func recommendedPressed(sender: AnyObject) {
+    }
+    
+    @IBAction func favoritesPressed(sender: AnyObject) {
+    }
 
+    
+    @IBAction func allNetworksPressed(sender: AnyObject) {
+    }
 
+    
+    @IBAction func categoriesPressed(sender: AnyObject) {
+    }
+
+    @IBAction func fullGuidePressed(sender: AnyObject) {
+    }
+
+    
+    var mainPlayingChannel: ChannelModel! = nil {
+        didSet {
+            playMainChannel(self.mainPlayingChannel)
+            updateHeadOverlay(self.mainPlayingChannel)
+        }
+    }
+    
 }
+
